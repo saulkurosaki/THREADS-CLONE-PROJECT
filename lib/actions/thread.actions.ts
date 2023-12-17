@@ -1,3 +1,5 @@
+"use server";
+
 import { revalidatePath } from "next/cache";
 import Thread from "../models/thread.model";
 import User from "../models/user.model";
@@ -31,5 +33,7 @@ export const createThread = async ({
     });
 
     revalidatePath(path);
-  } catch (error) {}
+  } catch (error: any) {
+    throw new Error(`Error creating thread: ${error.message}`);
+  }
 };
