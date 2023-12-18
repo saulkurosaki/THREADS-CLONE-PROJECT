@@ -12,7 +12,14 @@ const Profile = async ({ params }: { params: { id: string } }) => {
 
   return (
     <div>
-      <ProfileHeader />
+      <ProfileHeader
+        accountId={userInfo.id}
+        authUserId={user.id}
+        name={userInfo.name}
+        username={userInfo.username}
+        imgUrl={userInfo.image}
+        bio={userInfo.bio}
+      />
     </div>
   );
 };
