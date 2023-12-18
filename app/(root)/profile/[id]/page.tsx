@@ -54,7 +54,7 @@ const Profile = async ({ params }: { params: { id: string } }) => {
               className="w-full text-light-1"
             >
               <ThreadsTab
-                currentUser={user.id}
+                currentUserId={user.id}
                 accountId={userInfo.id}
                 accountType="User"
               />
