@@ -70,7 +70,45 @@ export const fetchPosts = async (pageNumber = 1, pageSize = 20) => {
     const isNext = totalPostsCount > skipAmount + posts.length;
 
     return { posts, isNext };
-  } catch (error) {
-    throw new Error(`Error getting the posts: ${error}`);
+  } catch (error: any) {
+    throw new Error(`Error getting the posts: ${error.message}`);
+  }
+};
+
+export const fetchThreadById = async (id: string) => {
+  connectToDB();
+
+  try {
+    // TODO: Populate Community
+    const thread = Thread.findById(id)
+      .populate({
+        path: "author",
+        model: User,
+        select: "_id id name image",
+      })
+      .populate({
+        path: "children",
+        populate: [
+          {
+            path: "author",
+            model: User,
+            select: "_id id name image",
+          },
+          {
+            path: "children",
+            model: Thread,
+            populate: {
+              path: "author",
+              model: User,
+              select: "_id id name image",
+            },
+          },
+        ],
+      })
+      .exec();
+
+    return thread;
+  } catch (error: any) {
+    throw new Error(`Error fetching Thread: ${error.message}`);
   }
 };
