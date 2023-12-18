@@ -7,6 +7,8 @@ interface Props {
 }
 
 const ThreadsTab = ({ currentUser, accountId, accountType }: Props) => {
+  // TODO: Fetch Profile Threads
+
   return <div>Threads Tab Test By Saul c:</div>;
 };
 
