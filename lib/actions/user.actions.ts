@@ -78,6 +78,8 @@ export const fetchUserPosts = async (userId: string) => {
       },
     });
     // TODO: Populate Community
+
+    return threads;
   } catch (error: any) {
     throw new Error(`Failed to fetch the user posts: ${error.message}`);
   }
