@@ -148,7 +148,7 @@ export const getActivity = async (userId: string) => {
     // Collect all the child thread ids (replies) from the 'children' field
     const childThreadIds = userThreads.reduce((acc, userThread) => {
       return acc.concat(userThread.children);
-    });
+    }, []);
 
     // Find all the threads that the user has replied to
     const replies = await Thread.find({
