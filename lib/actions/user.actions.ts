@@ -5,6 +5,7 @@ import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
 import Thread from "../models/thread.model";
 import { FilterQuery, SortOrder } from "mongoose";
+import Community from "../models/community.model";
 
 interface Params {
   userId: string;
@@ -59,31 +60,37 @@ export async function fetchUser(userId: string) {
   }
 }
 
-export const fetchUserPosts = async (userId: string) => {
-  connectToDB();
-
+export async function fetchUserPosts(userId: string) {
   try {
-    // Find all Threads authored by user with the given userId
+    connectToDB();
+
+    // Find all threads authored by the user with the given userId
     const threads = await User.findOne({ id: userId }).populate({
       path: "threads",
       model: Thread,
-      populate: {
-        path: "children",
-        model: Thread,
-        populate: {
-          path: "author",
-          model: User,
-          select: "name image id",
+      populate: [
+        {
+          path: "community",
+          model: Community,
+          select: "name id image _id", // Select the "name" and "_id" fields from the "Community" model
         },
-      },
+        {
+          path: "children",
+          model: Thread,
+          populate: {
+            path: "author",
+            model: User,
+            select: "name image id", // Select the "name" and "_id" fields from the "User" model
+          },
+        },
+      ],
     });
-    // TODO: Populate Community
-
     return threads;
-  } catch (error: any) {
-    throw new Error(`Failed to fetch the user posts: ${error.message}`);
+  } catch (error) {
+    console.error("Error fetching user threads:", error);
+    throw error;
   }
-};
+}
 
 export const fetchUsers = async ({
   userId,
