@@ -1,11 +1,12 @@
 "use client";
 
-import { sidebarLinks } from "@/constants";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const Bottombar = () => {
+import { sidebarLinks } from "@/constants";
+
+function Bottombar() {
   const pathname = usePathname();
 
   return (
@@ -14,7 +15,7 @@ const Bottombar = () => {
         {sidebarLinks.map((link) => {
           const isActive =
             (pathname.includes(link.route) && link.route.length > 1) ||
-            pathname === link.route; // Si el nombre de ruta se incluye en la URL y es mayor que 1 caracter || o el nombre de ruta es exacta
+            pathname === link.route;
 
           return (
             <Link
@@ -25,8 +26,9 @@ const Bottombar = () => {
               <Image
                 src={link.imgURL}
                 alt={link.label}
-                width={24}
-                height={24}
+                width={16}
+                height={16}
+                className="object-contain"
               />
 
               <p className="text-subtle-medium text-light-1 max-sm:hidden">
@@ -38,6 +40,6 @@ const Bottombar = () => {
       </div>
     </section>
   );
-};
+}
 
 export default Bottombar;
