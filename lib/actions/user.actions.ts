@@ -4,8 +4,6 @@ import { revalidatePath } from "next/cache";
 import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
 import Thread from "../models/thread.model";
-import { Trykker } from "next/font/google";
-import { getJsPageSizeInKb } from "next/dist/build/utils";
 import { FilterQuery, SortOrder } from "mongoose";
 
 interface Params {
@@ -17,17 +15,17 @@ interface Params {
   path: string;
 }
 
-export const updateUser = async ({
+export async function updateUser({
   userId,
-  username,
-  name,
   bio,
-  image,
+  name,
   path,
-}: Params): Promise<void> => {
-  connectToDB();
-
+  username,
+  image,
+}: Params): Promise<void> {
   try {
+    connectToDB();
+
     await User.findOneAndUpdate(
       { id: userId },
       {
@@ -46,7 +44,7 @@ export const updateUser = async ({
   } catch (error: any) {
     throw new Error(`Failed to create/update user: ${error.message}`);
   }
-};
+}
 
 export const fetchUser = async (userId: string) => {
   connectToDB();
