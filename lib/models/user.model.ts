@@ -1,14 +1,24 @@
-import { Schema, model, models } from "mongoose";
+import mongoose from "mongoose";
 
-const userSchema = new Schema({
-  id: { type: String, required: true },
-  username: { type: String, required: true, unique: true },
-  name: { type: String, required: true },
+const userSchema = new mongoose.Schema({
+  id: {
+    type: String,
+    required: true,
+  },
+  username: {
+    type: String,
+    unique: true,
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
   image: String,
   bio: String,
   threads: [
     {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Thread",
     },
   ],
@@ -18,12 +28,12 @@ const userSchema = new Schema({
   },
   communities: [
     {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Community",
     },
   ],
 });
 
-const User = models.User || model("User", userSchema);
+const User = mongoose.models.User || mongoose.model("User", userSchema);
 
 export default User;
