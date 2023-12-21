@@ -1,29 +1,31 @@
-import ThreadCard from "@/components/cards/ThreadCard";
-import Comment from "@/components/forms/Comment";
-import { fetchThreadById } from "@/lib/actions/thread.actions";
-import { fetchUser } from "@/lib/actions/user.actions";
-import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
-import React from "react";
+import { currentUser } from "@clerk/nextjs";
 
-const ThreadComments = async ({ params }: { params: { id: string } }) => {
+import Comment from "@/components/forms/Comment";
+import ThreadCard from "@/components/cards/ThreadCard";
+
+import { fetchUser } from "@/lib/actions/user.actions";
+import { fetchThreadById } from "@/lib/actions/thread.actions";
+
+export const revalidate = 0;
+
+async function page({ params }: { params: { id: string } }) {
   if (!params.id) return null;
 
   const user = await currentUser();
   if (!user) return null;
 
   const userInfo = await fetchUser(user.id);
-  if (!userInfo?.onboarded) redirect("onboarding");
+  if (!userInfo?.onboarded) redirect("/onboarding");
 
   const thread = await fetchThreadById(params.id);
 
   return (
-    <section>
+    <section className="relative">
       <div>
         <ThreadCard
-          key={thread._id}
           id={thread._id}
-          currentUser={user?.id || ""}
+          currentUserId={user.id}
           parentId={thread.parentId}
           content={thread.text}
           author={thread.author}
@@ -35,8 +37,8 @@ const ThreadComments = async ({ params }: { params: { id: string } }) => {
 
       <div className="mt-7">
         <Comment
-          threadId={thread.id}
-          currentUserImage={userInfo.image}
+          threadId={params.id}
+          currentUserImg={user.imageUrl}
           currentUserId={JSON.stringify(userInfo._id)}
         />
       </div>
@@ -46,7 +48,7 @@ const ThreadComments = async ({ params }: { params: { id: string } }) => {
           <ThreadCard
             key={childItem._id}
             id={childItem._id}
-            currentUser={childItem?.id || ""}
+            currentUserId={user.id}
             parentId={childItem.parentId}
             content={childItem.text}
             author={childItem.author}
@@ -59,6 +61,6 @@ const ThreadComments = async ({ params }: { params: { id: string } }) => {
       </div>
     </section>
   );
-};
+}
 
-export default ThreadComments;
+export default page;
