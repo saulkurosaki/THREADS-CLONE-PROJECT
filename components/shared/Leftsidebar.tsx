@@ -1,12 +1,13 @@
 "use client";
 
-import { sidebarLinks } from "@/constants";
-import { SignOutButton, SignedIn, useAuth } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { SignOutButton, SignedIn, useAuth } from "@clerk/nextjs";
 
-const Leftsidebar = () => {
+import { sidebarLinks } from "@/constants";
+
+const LeftSidebar = () => {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -18,7 +19,7 @@ const Leftsidebar = () => {
         {sidebarLinks.map((link) => {
           const isActive =
             (pathname.includes(link.route) && link.route.length > 1) ||
-            pathname === link.route; // Si el nombre de ruta se incluye en la URL y es mayor que 1 caracter || o el nombre de ruta es exacta
+            pathname === link.route;
 
           if (link.route === "/profile") link.route = `${link.route}/${userId}`;
 
@@ -26,7 +27,7 @@ const Leftsidebar = () => {
             <Link
               href={link.route}
               key={link.label}
-              className={`leftsidebar_link ${isActive && "bg-primary-500"}`}
+              className={`leftsidebar_link ${isActive && "bg-primary-500 "}`}
             >
               <Image
                 src={link.imgURL}
@@ -61,4 +62,4 @@ const Leftsidebar = () => {
   );
 };
 
-export default Leftsidebar;
+export default LeftSidebar;
