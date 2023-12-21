@@ -1,14 +1,17 @@
-import { Schema, model, models } from "mongoose";
+import mongoose from "mongoose";
 
-const threadSchema = new Schema({
-  text: { type: String, required: true },
+const threadSchema = new mongoose.Schema({
+  text: {
+    type: String,
+    required: true,
+  },
   author: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
   community: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "Community",
   },
   createdAt: {
@@ -20,12 +23,12 @@ const threadSchema = new Schema({
   },
   children: [
     {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Thread",
     },
   ],
 });
 
-const Thread = models.Thread || model("Thread", threadSchema);
+const Thread = mongoose.models.Thread || mongoose.model("Thread", threadSchema);
 
 export default Thread;
